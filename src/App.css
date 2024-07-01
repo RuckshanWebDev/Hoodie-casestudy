@@ -1,0 +1,139 @@
+.app {
+  width: 100%;
+  height: 100vh;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  z-index: 10;
+  padding: 30px 4vh 0;
+}
+
+.main {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  z-index: 10;
+  transform: translateY(-50%);
+  background-color: transparent;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 10;
+  padding: 0px 4vh 20px;
+}
+
+/*
+*Music Animated Icon
+*/
+.playing {
+  width: 25px;
+}
+
+.now.playing .bar {
+  display: inline-block;
+  position: relative;
+  margin-right: 1.5px;
+  width: 2px;
+  height: 1px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #ffffff81, #ffffff);
+  color: transparent;
+  animation-name: pulse;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.paused.playing .bar {
+  animation-iteration-count: 1;
+}
+
+.paused.playing:after {
+  content: "Paused (Lame)"
+}
+
+.n1 {
+  animation-delay: 0.5s;
+}
+
+.n2 {
+  animation-delay: 0.2s;
+}
+
+.n3 {
+  animation-delay: 1.2s;
+}
+
+.n4 {
+  animation-delay: 0.9s;
+}
+
+.n5 {
+  animation-delay: 2.3s;
+}
+
+.n6 {
+  animation-delay: 1.3s;
+}
+
+.n7 {
+  animation-delay: 3.1s;
+}
+
+.n8 {
+  animation-delay: 1.9s;
+}
+
+@keyframes pulse {
+  0% {
+    height: 1px;
+    margin-top: 0;
+  }
+
+  10% {
+    height: 12px;
+    margin-top: -40px;
+  }
+
+  50% {
+    height: 20px;
+    margin-top: -20px;
+  }
+
+  60% {
+    height: 6px;
+    margin-top: -14px;
+  }
+
+  80% {
+    height: 10px;
+    margin-top: -6px;
+  }
+
+  100% {
+    height: 1px;
+    margin-top: 0;
+  }
+}
+
+@media(max-width:768px) {
+  .main {
+    position: absolute;
+    top: auto;
+    bottom: 30px;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, 0);
+    background-color: transparent;
+    width: 90%;
+  }
+}

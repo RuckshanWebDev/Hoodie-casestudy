@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "LouisVuitton";
+  src: url(/public/fonts/LouisVuitton-Light.woff2);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "LouisVuitton";
+  src: url(/public/fonts/LouisVuitton-Regular.woff2);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "LouisVuitton";
+  src: url(/public/fonts/LouisVuitton-Bold.woff2);
+  font-weight: 900;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: 'LouisVuitton';
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgb(255, 255, 255);
+  /* background-color: #EC9F39; */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body .cursor__ball {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* mix-blend-mode: difference; */
+  z-index: 1000;
+}
+
+body .cursor__ball circle {
+  fill: #fff;
+  border: 1px solid #d6d6d6;
+}
+
+body .left,
+body .right {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body .right {
+  background: #fff;
+}
+
+body .right a {
+  border-bottom: 2px solid #000;
+}
+
+body .right h1,
+body .right p,
+body .right a {
+  color: #000;
+}
+
+.cursor {
+  pointer-events: none;
+  user-select: none;
+}
+
+.cursor__ball--big {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 1px solid #fff;
+  position: relative;
+}
+
+.cursor__ball--small {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.cursor__ball--text {}
+
+#loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 15;
+  background-image: url(/texture/bg-fabric1.jpg);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#loader span {
+  color: #000;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  display: inline-block;
+}
+
+.cta-btn {
+  background-color: transparent;
+  border: 1px solid #fff;
+  font-size: 24px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.cta-btn:hover {
+  background-color: #fff;
+  color: #636363;
+}
+
+@media(max-width : 768px) {
+  #loader div {
+    padding: 0 20px;
+  }
+
+  .cta-btn {
+    background-color: transparent;
+    border: 1px solid #fff;
+    font-size: 18px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+  }
+}
