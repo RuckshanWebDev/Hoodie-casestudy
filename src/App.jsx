@@ -4,8 +4,14 @@ import Experience from "./components/Experience.jsx";
 import Loader from "./components/Loader.jsx";
 import Ui from "./components/Ui.jsx";
 import { TweenMax } from "gsap/gsap-core.js";
+import useMyStore, { useStoreActions } from "./store.js";
+import { useShallow } from "zustand/react/shallow";
 
 function App() {
+
+  const { currentScene } = useMyStore()
+  console.log(currentScene);
+
   useEffect(() => {
     const $bigBall = document.querySelector('.cursor__ball--big');
     const $smallBall = document.querySelector('.cursor__ball--small');
@@ -22,12 +28,7 @@ function App() {
         y: e.pageY - 7
       })
     }
-
-
-
   }, [])
-
-
 
   return (
     <div className="app" >

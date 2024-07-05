@@ -1,15 +1,26 @@
-import { useTexture } from '@react-three/drei'
+import { useTexture, useVideoTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
+import { useShallow } from 'zustand/react/shallow'
+import useMyStore from '../store'
 
-function Base({ scaleFactor }) {
+function Base() {
 
+    const { scaleFactor, currentScene } = useMyStore(useShallow(state => ({ scaleFactor: state.scaleFactor, currentScene: state.currentScene })))
     const cloud1 = useRef()
     const cloud2 = useRef()
     const cloud3 = useRef()
     const cloud4 = useRef()
     const camel = useRef()
+
+    const birdsTexture = useVideoTexture('/texture/birds.mp4', {
+        muted: true,
+        loop: true,
+        start: true,
+    })
+
+    console.log(birdsTexture);
 
     const cloudTexture = useTexture('/texture/cloud.png')
     const cloudNoiseTexture = useTexture('/texture/cloudNoise.jpg')
@@ -31,7 +42,7 @@ function Base({ scaleFactor }) {
 
     return (
         <>
-            <group scale={scaleFactor}>
+            <group scale={scaleFactor} visible={currentScene === 1}>
                 <mesh position={[12, 12.4, -23]} scale={1} ref={camel} >
                     <planeGeometry args={[1, 1]} />
                     <meshBasicMaterial side={THREE.DoubleSide} map={camelTexture} transparent={true} alphaTest={.5} />
@@ -53,6 +64,10 @@ function Base({ scaleFactor }) {
                     <meshBasicMaterial side={THREE.DoubleSide} map={cloudTexture} alphaMap={cloudTexture} transparent={true} />
                 </mesh>
             </group>
+            <mesh position={[0, 13, -12]} rotation-x={-Math.PI} visible={currentScene === 2}>
+                <planeGeometry args={[20, 8]} />
+                <meshBasicMaterial side={THREE.DoubleSide} alphaMap={birdsTexture} color={'#C9CEC8'} transparent={true} opacity={.8} alphaTest={.1} />
+            </mesh>
         </>
     )
 }

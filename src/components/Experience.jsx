@@ -1,6 +1,7 @@
 import { Environment } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Wrapper from './Wrapeer'
+import { EffectComposer, Glitch, Vignette } from '@react-three/postprocessing';
 
 function Experience() {
 

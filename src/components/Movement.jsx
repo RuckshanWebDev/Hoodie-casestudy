@@ -1,20 +1,16 @@
-import { OrbitControls, useTexture } from '@react-three/drei'
 import { useThree } from '@react-three/fiber'
 import gsap from 'gsap'
 import React, { useEffect, useRef } from 'react'
-import * as THREE from 'three'
+import { useStoreActions } from '../store'
+import { OrbitControls } from '@react-three/drei'
 
-function Movement({ setZoom }) {
+function Movement() {
 
   const camera = useThree((state) => state.camera)
   const controls = useRef()
   const timeline = gsap.timeline()
   const zoomTimeline = gsap.timeline()
-
-
-  // const blurTexture = useTexture('/texture/blurTexture.png')
-  // blurTexture.wrapS = THREE.RepeatWrapping
-  // blurTexture.wrapT = THREE.RepeatWrapping
+  const { setZoom, setTransitionState } = useStoreActions()
 
   useEffect(() => {
 
@@ -32,7 +28,6 @@ function Movement({ setZoom }) {
           { y: (x * .02) + .04, x: (y * .02) - .08, delay: 0, duration: 1, ease: 'power1' },
           'start')
         .to(camera.rotation, { z: x * .02, duration: .3 }, 'start')
-
     })
 
     window.addEventListener('mousedown', (e) => {
@@ -40,12 +35,17 @@ function Movement({ setZoom }) {
       zoomTimeline
         .add('start')
         .to(camera.position, {
-          z: 0, delay: .2, duration: 1, onComplete: () => {
+          z: 0, delay: .2, duration: 1,
+          onStart: () => {
+            setTransitionState('playing')
+          },
+          onComplete: () => {
             setZoom(true)
           }
         }, 'start')
       // .to(camera.rotation, { z: .2, delay: .2, duration: 1 }, 'start')
     })
+
     window.addEventListener('mouseup', (e) => {
       zoomTimeline.clear()
       zoomTimeline
@@ -53,6 +53,9 @@ function Movement({ setZoom }) {
         .to(camera.position, {
           z: 5.5, delay: .2, duration: 1, onStart: () => {
             setZoom(false)
+          },
+          onComplete: () => {
+            setTransitionState('ready')
           }
         }, 'start')
       // .to(camera.rotation, { z: 0, delay: .2, duration: 1 }, 'start')
