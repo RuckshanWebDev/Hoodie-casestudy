@@ -9,9 +9,9 @@ function Experience() {
         console.log('loaded');
     }
 
-
+    // position: [0, 11.4, -7.5],
     return (
-        <Canvas gl={{ antialias: true }} camera={{ fov: 40, position: [0, 11.4, -7.5], }} onLoadedData={load}   >
+        <Canvas gl={{ antialias: true }} camera={{ fov: 40, }} onLoadedData={load}   >
 
             {/* <directionalLight
                 position={[0, 20, -5.5]}

@@ -20,8 +20,6 @@ function Base() {
         start: true,
     })
 
-    console.log(birdsTexture);
-
     const cloudTexture = useTexture('/texture/cloud.png')
     const cloudNoiseTexture = useTexture('/texture/cloudNoise.jpg')
     const camelTexture = useTexture('/texture/camel.png')

@@ -6,6 +6,13 @@ import Ui from "./components/Ui.jsx";
 import { TweenMax } from "gsap/gsap-core.js";
 import useMyStore, { useStoreActions } from "./store.js";
 import { useShallow } from "zustand/react/shallow";
+import { extend } from "@react-three/fiber";
+import { TransitionMaterial } from "./components/TransitionMaterial";
+
+
+extend({
+  TransitionMaterial,
+});
 
 function App() {
 
