@@ -48,7 +48,6 @@ function Model() {
     }, [zoomRatio])
 
     useEffect(() => {
-        console.log(hoodieText.current);
         if (currentScene === 1) {
             materials.uniform_1001.map = brownTexture
             materials.uniform_1001.needsUpdate = true

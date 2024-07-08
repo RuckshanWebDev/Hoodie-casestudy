@@ -1,41 +1,37 @@
-import { CameraControls, Mask, PerspectiveCamera, useFBO, useGLTF, useMask } from "@react-three/drei"
-import useMyStore from "../store"
-import { useShallow } from "zustand/react/shallow"
-import { useEffect, useRef, useState } from "react"
-import gsap from 'gsap'
-import * as THREE from 'three'
-import { useFrame, useThree } from "@react-three/fiber"
-import { DEG2RAD } from "three/src/math/MathUtils";
-
+import { CameraControls, PerspectiveCamera, useFBO, useGLTF } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
 import { MathUtils } from "three";
+import gsap from 'gsap';
+import useMyStore from "../store";
+import { useShallow } from "zustand/react/shallow";
 
 function Enviroment() {
-
     const viewport = useThree((state) => state.viewport);
-    const camera = useThree((state) => state.camera);
-    const timeline = gsap.timeline()
-    const scene = useGLTF('/assets/env and sky1.glb')
-    const scene2 = useGLTF('/assets/GoatSky.glb')
-    const { scaleFactor, currentScene } = useMyStore(useShallow(state => ({ scaleFactor: state.scaleFactor, currentScene: state.currentScene })))
-
+    const { scaleFactor, currentScene } = useMyStore(useShallow(state => ({ scaleFactor: state.scaleFactor, currentScene: state.currentScene })));
     const renderedScene = useRef();
     const exampleScene = useRef();
     const renderMaterial = useRef();
     const renderTarget = useFBO();
     const renderTarget2 = useFBO();
-    console.log(renderTarget);
-    const [mode, setMode] = useState('EXAMPLE_SCENE');
+    const [mode, setMode] = useState(0);
     const [prevMode, setPrevMode] = useState(0);
     const [progressionTarget] = useState(1);
-    const [transitionSpeed] = useState(.2);
+    const [transitionSpeed] = useState(.5);
     const renderCamera = useRef();
     const controls = useRef();
 
-    useFrame(({ gl, scene }, delta) => {
+    const { scene: scene1 } = useGLTF('/assets/env and sky1.glb');
+    const { scene: scene2 } = useGLTF('/assets/GoatSky.glb');
+
+
+
+    useFrame(({ gl, scene, camera }, delta) => {
+
 
         gl.setRenderTarget(renderTarget);
 
-        if (prevMode === 1) {
+        if (prevMode === 2) {
             renderedScene.current.visible = false;
             exampleScene.current.visible = true;
         } else {
@@ -46,13 +42,15 @@ function Enviroment() {
         renderMaterial.current.uProgression = MathUtils.lerp(
             renderMaterial.current.uProgression,
             progressionTarget,
-            delta * transitionSpeed
+            delta * 1
         );
-        gl.render(scene, renderCamera.current);
+
+
+        gl.render(scene, camera);
 
         gl.setRenderTarget(renderTarget2);
 
-        if (mode === 1) {
+        if (mode === 2) {
             renderedScene.current.visible = false;
             exampleScene.current.visible = true;
         } else {
@@ -60,7 +58,7 @@ function Enviroment() {
             exampleScene.current.visible = false;
         }
 
-        gl.render(scene, renderCamera.current);
+        gl.render(scene, camera);
 
         renderedScene.current.visible = false;
         exampleScene.current.visible = false;
@@ -70,49 +68,33 @@ function Enviroment() {
     });
 
     useEffect(() => {
-        // Set the camera position directly
-        renderCamera.current.position.set(0, 0, 20);
+        if (mode === prevMode) {
+            return;
+        }
+        renderMaterial.current.uProgression = 0;
+    }, [mode]);
 
-        // Make sure CameraControls uses the updated camera position
+    useEffect(() => {
+        // renderCamera.current.position.set(0, 0, 50);
+    }, []);
+
+    useEffect(() => {
         // controls.current.camera = renderCamera.current;
-        // 
-        // controls.current.updateCamera(renderCamera.current);
-        // controls.current.update();
     }, []);
 
     useEffect(() => {
-
-        controls.current.camera = renderCamera.current;
-        controls.current.setLookAt(
-            20.0146122041349432,
-            2.822796205893349,
-            10.587088991637922,
-            1.0858141754116573,
-            1.9366397611967157,
-            1.7546919697281576
-        );
-    }, []);
-
-    useEffect(() => {
-        setPrevMode(mode);
-        setMode(currentScene);
-    }, [currentScene])
+        setMode((mode) => {
+            setPrevMode(mode);
+            return currentScene;
+        });
+    }, [currentScene]);
 
     return (
         <>
-            <CameraControls
-                enablePan={true}
-                minPolarAngle={DEG2RAD * 70}
-                maxPolarAngle={DEG2RAD * 85}
-                minAzimuthAngle={DEG2RAD * -30}
-                maxAzimuthAngle={DEG2RAD * 30}
-                // minDistance={5}
-                // maxDistance={9}
-                ref={controls}
-            />
-            <PerspectiveCamera ref={renderCamera} position={[-5, 5, 20]} />
-            <mesh position={[0, -15, -20]} >
-                <planeGeometry args={[50, 40]} />
+            <CameraControls enablePan={true} ref={controls} />
+            {/* <PerspectiveCamera ref={renderCamera} position={[0, 20, 20]} fov={50} /> */}
+            <mesh position={[0, -10, -20]}>
+                <planeGeometry args={[viewport.width * 20, viewport.height * 20]} />
                 <transitionMaterial
                     ref={renderMaterial}
                     uTex={renderTarget.texture}
@@ -120,15 +102,14 @@ function Enviroment() {
                     toneMapped={false}
                 />
             </mesh>
-            <group position={[2, 0, 0]} scale={scaleFactor} ref={renderedScene} >
-                <primitive object={scene.scene} />
+            <group position={[2, 0, 0]} scale={scaleFactor} ref={renderedScene} name="scene1">
+                <primitive object={scene1} />
             </group>
-            <group position={[0, 2.8, -5]} scale={scaleFactor} ref={exampleScene} >
-                <primitive object={scene2.scene} />
+            <group position={[0, 2.8, -5]} scale={scaleFactor} ref={exampleScene} name="scene2">
+                <primitive object={scene2} />
             </group>
-
         </>
-    )
+    );
 }
 
-export default Enviroment
+export default Enviroment;

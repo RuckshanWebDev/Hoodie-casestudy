@@ -11,7 +11,7 @@ function Experience() {
 
     // position: [0, 11.4, -7.5],
     return (
-        <Canvas gl={{ antialias: true }} camera={{ fov: 40, }} onLoadedData={load}   >
+        <Canvas gl={{ antialias: true }} camera={{ fov: 40, position: [0, 10, 25], lookAt: () => (0, 0, 0) }} onLoadedData={load}   >
 
             {/* <directionalLight
                 position={[0, 20, -5.5]}

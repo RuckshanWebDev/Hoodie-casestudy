@@ -12,7 +12,6 @@ function SceneChange() {
     }
 
     const scrollHandler = (e) => {
-        console.log(transitionStateRef.current);
         if (transitionStateRef.current === 'ready') {
             if (e.deltaY < 0 && currentSceneRef.current > 1) {
                 incScene(-1)
@@ -28,6 +27,8 @@ function SceneChange() {
             document.body.removeEventListener('wheel', scrollHandler)
         }
     }, [])
+
+
 
     useEffect(() => {
         currentSceneRef.current = currentScene

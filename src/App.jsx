@@ -17,7 +17,6 @@ extend({
 function App() {
 
   const { currentScene } = useMyStore()
-  console.log(currentScene);
 
   useEffect(() => {
     const $bigBall = document.querySelector('.cursor__ball--big');
@@ -39,7 +38,7 @@ function App() {
 
   return (
     <div className="app" >
-      <Loader />
+      {/* <Loader /> */}
       <Suspense   >
         <Experience />
       </Suspense>
