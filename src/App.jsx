@@ -6,11 +6,14 @@ import Ui from "./components/Ui.jsx";
 import { TweenMax } from "gsap/gsap-core.js";
 import useMyStore, { useStoreActions } from "./store.js";
 import { useShallow } from "zustand/react/shallow";
+import { extend } from "@react-three/fiber";
+import TransitionMaterial from "./components/TransitionMaterial.jsx";
+
+extend({ TransitionMaterial });
 
 function App() {
 
   const { currentScene } = useMyStore()
-  console.log(currentScene);
 
   useEffect(() => {
     const $bigBall = document.querySelector('.cursor__ball--big');

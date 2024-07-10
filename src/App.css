@@ -93,6 +93,33 @@ footer {
   animation-delay: 1.9s;
 }
 
+#indicator {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  font: 1em Hind, sans-serif;
+  line-height: 1.5;
+  padding: 1.5em 0;
+}
+
+
+/* Dark mode */
+@media screen and (prefers-color-scheme: dark) {
+  body {
+    background: #17181c;
+    color: #e3e4e8;
+  }
+
+  input:checked+label,
+  input:checked+label span,
+  .worm__segment:before {
+    color: #5583f6;
+  }
+}
+
 @keyframes pulse {
   0% {
     height: 1px;

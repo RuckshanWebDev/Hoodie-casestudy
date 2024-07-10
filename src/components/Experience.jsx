@@ -27,7 +27,7 @@ function Experience() {
             // shadow-camera-bottom={-10}
             /> */}
 
-            {/* <EffectComposer enableNormalPass={true} >
+            {/* <EffectComposer enableNormalPass={false} >
                 <Vignette eskil={false} offset={.1} darkness={0.1} />
                 <Glitch
                     delay={[10, 10]} // min and max glitch delay

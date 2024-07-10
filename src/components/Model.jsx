@@ -48,7 +48,6 @@ function Model() {
     }, [zoomRatio])
 
     useEffect(() => {
-        console.log(hoodieText.current);
         if (currentScene === 1) {
             materials.uniform_1001.map = brownTexture
             materials.uniform_1001.needsUpdate = true
@@ -59,7 +58,7 @@ function Model() {
                 .to(model.current.rotation,
                     {
                         y: model.current.rotation.y + Math.PI * 6, delay: 0, duration: 2.5, ease: 'power4.out',
-                        onComplete: () => setTransitionState('ready')
+                        onComplete: () => { console.log('changed'); setTransitionState('ready') }
                     }, 'start'
                 )
         }

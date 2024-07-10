@@ -1,10 +1,13 @@
 import React from 'react'
+import useMyStore from '../store';
 
 function Ui() {
 
     function navigateTo(path) {
         window.parent.postMessage({ path: path }, '*');
     }
+
+    const currentScene = useMyStore(state => state.currentScene)
 
 
     // const origin = localStorage.getItem('origin')
@@ -54,6 +57,27 @@ function Ui() {
             <main>
 
             </main>
+
+            <div id="indicator">
+                <div class="flex flex-col space-y-4 p-5">
+
+                    <label class="relative flex items-center cursor-pointer">
+                        <input class="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 1} />
+                        <div
+                            class="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#BA7A4D] peer-hover:shadow-lg peer-hover:shadow-yellow-500/50 peer-checked:shadow-lg peer-checked:shadow-yellow-500/50 transition duration-300 ease-in-out"
+                        ></div>
+
+                    </label>
+                    <label class="relative flex items-center cursor-pointer">
+                        <input class="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 2} />
+                        <div
+                            class="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#242018] peer-hover:shadow-lg peer-hover:shadow-[#242018] peer-checked:shadow-lg peer-checked:shadow-[#242018]  transition duration-300 ease-in-out"
+                        ></div>
+
+                    </label>
+                </div>
+
+            </div>
 
             <footer className=' items-center w-full justify-between hidden md:flex '>
                 <div className="flex gap-2 items-baseline">
