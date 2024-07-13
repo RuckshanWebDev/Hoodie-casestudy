@@ -2,6 +2,8 @@ import { Environment } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Wrapper from './Wrapeer'
 import { EffectComposer, Glitch, Vignette } from '@react-three/postprocessing';
+import { Stats } from '@react-three/drei'
+
 
 function Experience() {
 
@@ -11,7 +13,7 @@ function Experience() {
 
 
     return (
-        <Canvas gl={{ antialias: true }} camera={{ fov: 40, position: [0, 11.4, -7.5], }} onLoadedData={load}   >
+        <Canvas gl={{ antialias: true }} camera={{ fov: 40, position: [0, 11.4, -5.5], }} onLoadedData={load}   >
 
             {/* <directionalLight
                 position={[0, 20, -5.5]}

@@ -9,6 +9,7 @@ import { useShallow } from "zustand/react/shallow";
 import { extend } from "@react-three/fiber";
 import TransitionMaterial from "./components/TransitionMaterial.jsx";
 
+
 extend({ TransitionMaterial });
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
 
   return (
     <div className="app" >
-      <Loader />
+      {/* <Loader /> */}
       <Suspense   >
         <Experience />
       </Suspense>

@@ -4,8 +4,10 @@ const useMyStore = create((set) => ({
     zoom: false,
     scaleFactor: 0,
     transitionState: 'ready', // [playing, ready]
-    currentScene: 2,
+    currentScene: 1,
+    init: false,
     actions: {
+        setInit: () => set({ init: true }),
         setZoom: (value) => set({ zoom: value }),
         setScaleFactor: (value) => set({ scaleFactor: value }),
         setTransitionState: (value) => set({ transitionState: value }),

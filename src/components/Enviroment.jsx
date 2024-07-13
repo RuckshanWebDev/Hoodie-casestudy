@@ -9,7 +9,7 @@ import { useFrame } from "@react-three/fiber"
 function Enviroment() {
 
     const timeline = gsap.timeline()
-    const scene = useGLTF('/assets/env and sky1.glb')
+    const scene = useGLTF('/assets/env and sky2.glb')
     const { nodes, materials } = useGLTF('/assets/GoatSky.glb')
     const { scaleFactor, currentScene, transitionState } = useMyStore(useShallow(state => ({
         scaleFactor: state.scaleFactor,
@@ -30,6 +30,8 @@ function Enviroment() {
     goatSkyTexture.flipY = false
     goatTreeTexture.flipY = false
     const [transitionProgression, setTransitionProgression] = useState(0);
+    const lastTimeRef = useRef(0);
+
 
     useEffect(() => {
 
@@ -37,19 +39,20 @@ function Enviroment() {
             timeline
                 .add('start')
                 .to(scene.scene.position, {
-                    z: -2,
+                    z: -4,
                     x: 0,
                     delay: .5
                     // onComplete: () => goatSceneRef.current.visible = false
                 }, 'start')
                 .to(noise.current.position, {
-                    z: -16,
-                    duration: 1,
+                    z: -13,
+                    delay: .5,
+                    duration: .3,
                     onStart: () => noise.current.visible = true,
                     onComplete: () => noise.current.visible = false,
                 }, 'start')
                 .to(goatSceneRef.current.position, {
-                    x: 2,
+                    x: 1,
                     delay: .5
                 }, 'start')
         }
@@ -58,13 +61,14 @@ function Enviroment() {
                 .add('start')
                 .to(scene.scene.position, {
                     z: -4,
-                    x: -5,
+                    x: -1,
                     delay: 1,
                     // onComplete: () => scene.scene.visible = false
                 }, 'start')
                 .to(noise.current.position, {
-                    z: -16,
-                    delay: .8,
+                    z: -13,
+                    delay: .5,
+                    duration: .4,
                     onStart: () => noise.current.visible = true,
                     onComplete: () => noise.current.visible = false,
                 }, 'start')
@@ -75,11 +79,21 @@ function Enviroment() {
         }
     }, [currentScene])
 
-    useFrame(() => {
+    useFrame(({ clock }) => {
+
+        const currentTime = clock.getElapsedTime();
+        const deltaTime = currentTime - lastTimeRef.current;
+        // console.log(deltaTime );
+
+        if (deltaTime < 1 / 60) return
+
+        lastTimeRef.current = currentTime;
+
+
         if (currentScene === 1 && transitionState === 'playing') {
-            setTransitionProgression(prev => Math.min(prev + 0.01, 1));
+            setTransitionProgression(prev => Math.min(prev + 0.02, 1));
         } else if (currentScene === 2 && transitionState === 'playing') {
-            setTransitionProgression(prev => Math.max(prev - 0.01, 0));
+            setTransitionProgression(prev => Math.max(prev - 0.02, 0));
         } else if (transitionState === 'ready') {
             setTransitionProgression(currentScene === 1 ? 1 : 0);
         }
@@ -91,7 +105,6 @@ function Enviroment() {
 
     return (
         <>
-            {/* <primitive object={camel.scene} /> */}
             <group position={[2, 0, 0]} scale={scaleFactor} >
                 <primitive object={scene.scene} />
             </group>
@@ -113,14 +126,12 @@ function Enviroment() {
                         uSmoothness={0.5}
                         transparent={true}
                     />
-                    {/* <meshBasicMaterial clone={materials.Sky} map={materials.Sky.map} {...stencil} /> */}
                 </mesh>
                 <mesh
                     ref={goatTreeRef}
                     castShadow
                     receiveShadow
                     geometry={nodes.Foregrounda.geometry}
-                    material={materials.Tree}
                     position={[0, 0.449, -7.49]}
                     rotation={[Math.PI / 2, 0, 0]}
                     scale={2.273}
@@ -138,7 +149,7 @@ function Enviroment() {
 
             <mesh position={[0, 10, -16]} ref={noise} >
                 <planeGeometry args={[30, 20]} />
-                <meshBasicMaterial transparent={true} map={texture} opacity={1} />
+                <meshBasicMaterial transparent={true} map={texture} opacity={.5} />
             </mesh>
         </>
     )

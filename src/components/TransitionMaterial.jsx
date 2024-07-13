@@ -7,7 +7,7 @@ const TransitionMaterial = shaderMaterial(
     uProgression: 0,
     uTex: undefined,
     uRepeat: 1,
-    uSmoothness: 0.5,
+    uSmoothness: 1,
   },
   resolveLygia(/*glsl*/ `
     varying vec2 vUv;

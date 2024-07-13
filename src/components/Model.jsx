@@ -9,7 +9,7 @@ function Model() {
 
     const hoodieText = useRef()
     const { nodes, materials } = useGLTF('/assets/Hoodie_V3.glb')
-    const { zoom, currentScene } = useMyStore(useShallow(state => ({ zoom: state.zoom, currentScene: state.currentScene })))
+    const { zoom, currentScene, init } = useMyStore(useShallow(state => ({ zoom: state.zoom, currentScene: state.currentScene, init: state.init })))
     const { setTransitionState } = useStoreActions()
     const blackTexture = useTexture('/assets/BlackDiffuce.jpg')
     const brownTexture = useTexture('/assets/BrownDiffuce.jpg')
@@ -19,6 +19,12 @@ function Model() {
     const modelContainer = useRef()
     const model = useRef()
     const timeline = gsap.timeline()
+
+    function frontFaceCalc(val) {
+        const bal = val % (2 * Math.PI)
+        console.log((val + bal) % Math.PI);
+        return val + bal
+    }
 
     let zoomRatio = zoom ? 4.14 : .5
 
@@ -48,7 +54,7 @@ function Model() {
     }, [zoomRatio])
 
     useEffect(() => {
-        if (currentScene === 1) {
+        if (currentScene === 1 && init) {
             materials.uniform_1001.map = brownTexture
             materials.uniform_1001.needsUpdate = true
             hoodieText.current.visible = true
@@ -57,7 +63,7 @@ function Model() {
                 .add('start')
                 .to(model.current.rotation,
                     {
-                        y: model.current.rotation.y + Math.PI * 6, delay: 0, duration: 2.5, ease: 'power4.out',
+                        y: frontFaceCalc(model.current.rotation.y + Math.PI * 8), delay: 0, duration: 3.5, ease: 'power4.out',
                         onComplete: () => { console.log('changed'); setTransitionState('ready') }
                     }, 'start'
                 )
@@ -71,7 +77,7 @@ function Model() {
                 .add('start')
                 .to(model.current.rotation,
                     {
-                        y: model.current.rotation.y - Math.PI * 6, delay: 0, duration: 2.5, ease: 'power4.out',
+                        y: frontFaceCalc(model.current.rotation.y - Math.PI * 8), delay: 0, duration: 3.5, ease: 'power4.out',
                         onComplete: () => setTransitionState('ready')
                     }, 'start'
                 )
@@ -83,7 +89,7 @@ function Model() {
 
     return (
         <>
-            <group position={[0, 6.2, -8]} scale={[.7, .7, .7]} ref={modelContainer}>
+            <group position={[-.4, 6.2, -8]} scale={[.7, .7, .7]} ref={modelContainer}>
                 <Float
                     speed={1} // Animation speed, defaults to 1
                     rotationIntensity={1} // XYZ rotation intensity, defaults to 1

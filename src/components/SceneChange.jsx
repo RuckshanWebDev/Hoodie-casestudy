@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import useMyStore from '../store'
+import useMyStore, { useStoreActions } from '../store'
 
 function SceneChange() {
-    const { transitionState, currentScene, setCurrentScene } = useMyStore()
+    const { transitionState, currentScene, setCurrentScene, init } = useMyStore()
+    const { setInit } = useStoreActions()
     const currentSceneRef = useRef(currentScene)
     const transitionStateRef = useRef(transitionState)
 
     const incScene = (val) => {
+        init || setInit()
         const newScene = currentSceneRef.current + val
         setCurrentScene(newScene)
     }

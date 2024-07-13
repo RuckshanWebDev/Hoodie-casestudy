@@ -12,56 +12,102 @@ function Movement() {
   const zoomTimeline = gsap.timeline()
   const { setZoom, setTransitionState } = useStoreActions()
 
+  const cameraZPos = window.innerWidth < 769 ? 9.5 : 5.5
+
   useEffect(() => {
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth * 2) - 1;
+      const y = (e.clientY / window.innerHeight * 2) - 1;
 
-    camera.lookAt(0, 0, -100)
-    gsap.to(camera.position, { z: 5.5, y: 12, duration: 2.5, delay: 1, ease: "power1.out", })
-
-    window.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth * 2) - 1
-      const y = (e.clientY / window.innerHeight * 2) - 1
-
-      timeline.clear()
+      timeline.clear();
       timeline
         .add('start')
-        .to(camera.rotation,
-          { y: (x * .02) + .04, x: (y * .02) - .08, delay: 0, duration: 1, ease: 'power1' },
-          'start')
-        .to(camera.rotation, { z: x * .02, duration: .3 }, 'start')
-    })
+        .to(camera.rotation, {
+          y: (x * .02) + .04,
+          x: (y * .02) - .08,
+          delay: 0,
+          duration: 1,
+          ease: 'power1',
+        }, 'start')
+        .to(camera.rotation, { z: x * .02, duration: .3 }, 'start');
+    };
 
-    window.addEventListener('mousedown', (e) => {
-      zoomTimeline.clear()
+    const handleMouseDown = () => {
+      zoomTimeline.clear();
       zoomTimeline
         .add('start')
         .to(camera.position, {
-          z: 0, delay: .2, duration: 1,
+          z: 0,
+          delay: .2,
+          duration: 1,
           onStart: () => {
-            setTransitionState('playing')
+            setTransitionState('playing');
           },
           onComplete: () => {
-            setZoom(true)
+            setZoom(true);
           }
-        }, 'start')
-      // .to(camera.rotation, { z: .2, delay: .2, duration: 1 }, 'start')
-    })
+        }, 'start');
+    };
 
-    window.addEventListener('mouseup', (e) => {
-      zoomTimeline.clear()
+    const handleMouseUp = () => {
+      zoomTimeline.clear();
       zoomTimeline
         .add('start')
         .to(camera.position, {
-          z: 5.5, delay: .2, duration: 1, onStart: () => {
-            setZoom(false)
+          z: cameraZPos,
+          delay: .2,
+          duration: 1,
+          onStart: () => {
+            setZoom(false);
           },
           onComplete: () => {
-            setTransitionState('ready')
+            setTransitionState('ready');
           }
-        }, 'start')
-      // .to(camera.rotation, { z: 0, delay: .2, duration: 1 }, 'start')
-    })
+        }, 'start');
+    };
 
-  }, [])
+    camera.lookAt(0, 0, -100);
+    gsap.to(camera.position, { z: cameraZPos, y: 12, duration: 2.5, delay: 1, ease: "power1.out" });
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+      const x = (touch.clientX / window.innerWidth * 2) - 1;
+      const y = (touch.clientY / window.innerHeight * 2) - 1;
+
+      timeline.clear();
+      timeline
+        .add('start')
+        .to(camera.rotation, {
+          y: (x * .02) + .04,
+          x: (y * .02) - .08,
+          delay: 0,
+          duration: 1,
+          ease: 'power1',
+        }, 'start')
+        .to(camera.rotation, { z: x * .02, duration: .3 }, 'start');
+    };
+
+    const handleTouchStart = handleMouseDown;
+    const handleTouchEnd = handleMouseUp;
+
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
 
   return (
     <>

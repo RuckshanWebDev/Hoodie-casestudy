@@ -12,7 +12,7 @@ function Base() {
     const cloud2 = useRef()
     const cloud3 = useRef()
     const cloud4 = useRef()
-    const camel = useRef()
+    // const camel = useRef()
 
     const birdsTexture = useVideoTexture('/texture/birds.mp4', {
         muted: true,
@@ -23,7 +23,7 @@ function Base() {
 
     const cloudTexture = useTexture('/texture/cloud.png')
     const cloudNoiseTexture = useTexture('/texture/cloudNoise.jpg')
-    const camelTexture = useTexture('/texture/camel.png')
+    // const camelTexture = useTexture('/texture/camel.png')
 
     cloudNoiseTexture.wrapS = THREE.RepeatWrapping
     cloudNoiseTexture.wrapT = THREE.RepeatWrapping
@@ -35,17 +35,17 @@ function Base() {
         if (cloud2.current) cloud2.current.position.x = Math.sin(clock.elapsedTime * .01 + 10) * 10
         if (cloud3.current) cloud3.current.position.x = Math.sin(clock.elapsedTime * .01 + 20) * 10
         if (cloud4.current) cloud4.current.position.x = Math.sin(clock.elapsedTime * .01 + 5) * 10
-        if (camel.current) camel.current.position.x -= .001
+        // if (camel.current) camel.current.position.x -= .001
 
     })
 
     return (
         <>
             <group scale={scaleFactor} visible={currentScene === 1}>
-                <mesh position={[12, 12.4, -23]} scale={1} ref={camel} >
+                {/* <mesh position={[12, 12.4, -23]} scale={1} ref={camel} >
                     <planeGeometry args={[1, 1]} />
                     <meshBasicMaterial side={THREE.DoubleSide} map={camelTexture} transparent={true} alphaTest={.5} />
-                </mesh>
+                </mesh> */}
                 <mesh position={[-5, 13, -12]} ref={cloud1} scale={.8} >
                     <planeGeometry args={[15, 10]} />
                     <meshBasicMaterial side={THREE.DoubleSide} map={cloudTexture} alphaMap={cloudTexture} transparent={true} />
