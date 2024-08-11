@@ -20,7 +20,10 @@ function Base() {
         start: true,
     })
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d3539a09b88121c96ff5a12e385884dc6b9a8e7e
     const cloudTexture = useTexture('/texture/cloud.png')
     const cloudNoiseTexture = useTexture('/texture/cloudNoise.jpg')
     // const camelTexture = useTexture('/texture/camel.png')

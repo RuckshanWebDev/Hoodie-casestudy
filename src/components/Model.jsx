@@ -68,8 +68,14 @@ function Model() {
 
 
     useEffect(() => {
+<<<<<<< HEAD
         let count = 0
         if (currentScene === 1 && init) {
+=======
+        if (currentScene === 1) {
+            materials.uniform_1001.map = brownTexture
+            materials.uniform_1001.needsUpdate = true
+>>>>>>> d3539a09b88121c96ff5a12e385884dc6b9a8e7e
             hoodieText.current.visible = true
             setTransitionState('playing')
             timeline

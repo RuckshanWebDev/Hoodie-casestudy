@@ -7,10 +7,19 @@ import { TweenMax } from "gsap/gsap-core.js";
 import useMyStore, { useStoreActions } from "./store.js";
 import { useShallow } from "zustand/react/shallow";
 import { extend } from "@react-three/fiber";
+<<<<<<< HEAD
 import TransitionMaterial from "./components/TransitionMaterial.jsx";
 
 
 extend({ TransitionMaterial });
+=======
+import { TransitionMaterial } from "./components/TransitionMaterial";
+
+
+extend({
+  TransitionMaterial,
+});
+>>>>>>> d3539a09b88121c96ff5a12e385884dc6b9a8e7e
 
 function App() {
 
@@ -36,7 +45,7 @@ function App() {
 
   return (
     <div className="app" >
-      <Loader />
+      {/* <Loader /> */}
       <Suspense   >
         <Experience />
       </Suspense>
