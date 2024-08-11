@@ -1,34 +1,45 @@
 import { Float, useGLTF, useTexture } from '@react-three/drei'
 import gsap from 'gsap'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import useMyStore, { useStoreActions } from '../store'
 import * as THREE from 'three'
 
 function Model() {
 
+    const [prevState, setPrevState] = useState(0)
     const hoodieText = useRef()
     const { nodes, materials } = useGLTF('/assets/Hoodie_V3.glb')
     const { zoom, currentScene, init } = useMyStore(useShallow(state => ({ zoom: state.zoom, currentScene: state.currentScene, init: state.init })))
     const { setTransitionState } = useStoreActions()
     const blackTexture = useTexture('/assets/BlackDiffuce.jpg')
     const brownTexture = useTexture('/assets/BrownDiffuce.jpg')
+    const blueTexture = useTexture('/assets/BlueDiffuce.jpg')
+    const greyTexture = useTexture('/assets/Diffuce.jpg')
     brownTexture.colorSpace = THREE.SRGBColorSpace
     blackTexture.colorSpace = THREE.SRGBColorSpace
+    blueTexture.colorSpace = THREE.SRGBColorSpace
+    greyTexture.colorSpace = THREE.SRGBColorSpace
 
     const modelContainer = useRef()
     const model = useRef()
     const timeline = gsap.timeline()
 
-    function frontFaceCalc(val) {
+    function frontFaceCalc(val, direction) {
         const bal = val % (2 * Math.PI)
-        console.log((val + bal) % Math.PI);
-        return val + bal
+        console.log(val);
+
+        if (!direction) {
+            return (val + bal) + (Math.PI * 8)
+        } else {
+            return (val + bal) - (-Math.PI * 8)
+        }
     }
 
     let zoomRatio = zoom ? 4.14 : .5
 
     const mouseMoveHandler = (e) => {
+        if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return
         const x = (e.clientX / window.innerWidth * 2) - 1
         const y = (e.clientY / window.innerHeight * 2) - 1
 
@@ -53,43 +64,108 @@ function Model() {
 
     }, [zoomRatio])
 
+
+
+
     useEffect(() => {
+        let count = 0
         if (currentScene === 1 && init) {
-            materials.uniform_1001.map = brownTexture
-            materials.uniform_1001.needsUpdate = true
             hoodieText.current.visible = true
             setTransitionState('playing')
             timeline
                 .add('start')
                 .to(model.current.rotation,
                     {
-                        y: frontFaceCalc(model.current.rotation.y + Math.PI * 8), delay: 0, duration: 3.5, ease: 'power4.out',
-                        onComplete: () => { console.log('changed'); setTransitionState('ready') }
+                        y: frontFaceCalc(model.current.rotation.y, currentScene > prevState), delay: 0, duration: 3.5, ease: 'power4.out',
+                        onUpdate: function () {
+                            count++
+                            if (count === 40) {
+                                materials.uniform_1001.map = brownTexture
+                                materials.uniform_1001.needsUpdate = true
+                            }
+                        },
+                        onComplete: () => {
+                            count = 0
+                            setPrevState(currentScene)
+                            setTransitionState('ready')
+                        }
                     }, 'start'
                 )
-        }
-        if (currentScene === 2) {
-            materials.uniform_1001.map = blackTexture
-            materials.uniform_1001.needsUpdate = true
+        } else if (currentScene === 2) {
             hoodieText.current.visible = false
             setTransitionState('playing')
             timeline
                 .add('start')
                 .to(model.current.rotation,
                     {
-                        y: frontFaceCalc(model.current.rotation.y - Math.PI * 8), delay: 0, duration: 3.5, ease: 'power4.out',
-                        onComplete: () => setTransitionState('ready')
+                        y: frontFaceCalc(model.current.rotation.y, currentScene > prevState), delay: 0, duration: 3.5, ease: 'power4.out',
+                        onUpdate: function () {
+                            count++
+                            if (count === 40) {
+                                materials.uniform_1001.map = blackTexture
+                                materials.uniform_1001.needsUpdate = true
+                            }
+                        },
+                        onComplete: () => {
+                            count = 0
+                            setPrevState(currentScene)
+                            setTransitionState('ready')
+                        }
                     }, 'start'
                 )
-
+        } else if (currentScene === 3) {
+            hoodieText.current.visible = false
+            setTransitionState('playing')
+            timeline
+                .add('start')
+                .to(model.current.rotation,
+                    {
+                        y: frontFaceCalc(model.current.rotation.y, currentScene > prevState), delay: 0, duration: 3.5, ease: 'power4.out',
+                        onUpdate: function () {
+                            count++
+                            if (count === 40) {
+                                materials.uniform_1001.map = blueTexture
+                                materials.uniform_1001.needsUpdate = true
+                            }
+                        },
+                        onComplete: () => {
+                            count = 0
+                            setPrevState(currentScene)
+                            setTransitionState('ready')
+                        }
+                    }, 'start'
+                )
+        } else if (currentScene === 4) {
+            hoodieText.current.visible = false
+            setTransitionState('playing')
+            timeline
+                .add('start')
+                .to(model.current.rotation,
+                    {
+                        y: frontFaceCalc(model.current.rotation.y, currentScene > prevState), delay: 0, duration: 3.5, ease: 'power4.out',
+                        onUpdate: function () {
+                            count++
+                            if (count === 40) {
+                                materials.uniform_1001.map = greyTexture
+                                materials.uniform_1001.needsUpdate = true
+                            }
+                        },
+                        onComplete: () => {
+                            count = 0
+                            setPrevState(currentScene)
+                            setTransitionState('ready')
+                        }
+                    }, 'start'
+                )
         }
     }, [currentScene])
 
 
 
+
     return (
         <>
-            <group position={[-.4, 6.2, -8]} scale={[.7, .7, .7]} ref={modelContainer}>
+            <group position={[window.innerWidth < 769 ? 0 : -.4, 6.2, -8]} scale={[.7, .7, .7]} ref={modelContainer}>
                 <Float
                     speed={1} // Animation speed, defaults to 1
                     rotationIntensity={1} // XYZ rotation intensity, defaults to 1

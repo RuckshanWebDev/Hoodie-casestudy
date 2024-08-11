@@ -137,6 +137,32 @@ body .right a {
   color: #636363;
 }
 
+#indicator label input:checked+div {
+  animation: fadeIn infinite 1.4s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: .4;
+    scale: .9;
+  }
+
+  25% {
+    opacity: .5;
+    scale: 1;
+  }
+
+  75% {
+    opacity: 1;
+    scale: 1.1;
+  }
+
+  100% {
+    opacity: .5;
+    scale: 1;
+  }
+}
+
 @media(max-width : 768px) {
   #loader div {
     padding: 0 20px;

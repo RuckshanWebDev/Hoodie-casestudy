@@ -12,10 +12,30 @@ function Movement() {
   const zoomTimeline = gsap.timeline()
   const { setZoom, setTransitionState } = useStoreActions()
 
-  const cameraZPos = window.innerWidth < 769 ? 9.5 : 5.5
+
+  function detectMob() {
+    const toMatch = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i
+    ];
+
+    return toMatch.some((toMatchItem) => {
+      return navigator.userAgent.match(toMatchItem);
+    });
+  }
+
+  const isMobile = detectMob()
+  const cameraZPos = isMobile ? 2.2 : 5.5
 
   useEffect(() => {
+
     const handleMouseMove = (e) => {
+      if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return
       const x = (e.clientX / window.innerWidth * 2) - 1;
       const y = (e.clientY / window.innerHeight * 2) - 1;
 
@@ -66,45 +86,18 @@ function Movement() {
         }, 'start');
     };
 
-    camera.lookAt(0, 0, -100);
-    gsap.to(camera.position, { z: cameraZPos, y: 12, duration: 2.5, delay: 1, ease: "power1.out" });
+    camera.lookAt(0, isMobile ? 12 : 0, -100);
+    gsap.to(camera.position, { z: cameraZPos, y: isMobile ? 11 : 12, duration: 2.5, delay: 1, ease: "power1.out" });
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
 
-    const handleTouchMove = (e) => {
-      const touch = e.touches[0];
-      const x = (touch.clientX / window.innerWidth * 2) - 1;
-      const y = (touch.clientY / window.innerHeight * 2) - 1;
-
-      timeline.clear();
-      timeline
-        .add('start')
-        .to(camera.rotation, {
-          y: (x * .02) + .04,
-          x: (y * .02) - .08,
-          delay: 0,
-          duration: 1,
-          ease: 'power1',
-        }, 'start')
-        .to(camera.rotation, { z: x * .02, duration: .3 }, 'start');
-    };
-
-    const handleTouchStart = handleMouseDown;
-    const handleTouchEnd = handleMouseUp;
-
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 

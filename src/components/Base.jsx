@@ -63,7 +63,7 @@ function Base() {
                     <meshBasicMaterial side={THREE.DoubleSide} map={cloudTexture} alphaMap={cloudTexture} transparent={true} />
                 </mesh>
             </group>
-            <mesh position={[0, 13, -12]} rotation-x={-Math.PI} visible={currentScene === 2}>
+            <mesh position={[0, 13, -10]} rotation-x={-Math.PI} visible={currentScene === 2}>
                 <planeGeometry args={[20, 8]} />
                 <meshBasicMaterial side={THREE.DoubleSide} alphaMap={birdsTexture} color={'#C9CEC8'} transparent={true} opacity={.8} alphaTest={.1} />
             </mesh>

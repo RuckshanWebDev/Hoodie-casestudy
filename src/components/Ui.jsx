@@ -1,10 +1,34 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import useMyStore from '../store';
+import gsap from 'gsap';
+
+const data = [
+    {
+        title: 'Desert Owners',
+        text: `Our "Desert Owners" hoodie, straight out of the Moroccan desert vibes. It's all about sparking conversations — yeah, we're talking about who really owns the Sahara (We both know who does). Rock this hoodie, and you're not just wearing it, you're making a statement. Desert cool meets street-ready, right here.`
+    },
+    {
+        title: 'Goated',
+        text: `Introducing our "Goated" hoodie, where Moroccan charm meets streetwear cool. Picture this: argan trees adorned with goats—yeah, those goats are on top of their game, literally. It's not just about the design; it's about embracing the GOAT mentality. Stand tall, stand stylish in this ode to Morocco's natural wonders and urban vibe.`
+    },
+    {
+        title: 'Blue Pearl',
+        text: `The "Blue Pearl" hoodie, inspired by Chefchaouen's mesmerizing blue hues. A doorway to Moroccan magic, right on your chest. It's more than a hoodie; it's a tribute to the Blue Pearl of Morocco, capturing the essence of wanderlust and vibrant charm.`
+    },
+    {
+        title: 'Weapons of Mass Destruction',
+        text: `Our "Weapons of Mass Destruction" hoodie, featuring the favorite weapon of most Moroccan moms—the belgha—set ablaze. A playful nod to childhood memories and Moroccan tradition, wrapped in streetwear style.`
+    },
+]
 
 function Ui() {
 
+    const timeline = gsap.timeline()
+    const title = useRef()
+    const text = useRef()
+
     function navigateTo(path) {
-        window.parent.postMessage({ path: path }, '*');
+        window.parent.postMessage({ path: path }, '*')
     }
 
     const currentScene = useMyStore(state => state.currentScene)
@@ -15,8 +39,22 @@ function Ui() {
             setCurrentScene(e.target.value * 1)
         }
     }
+
+    useEffect(() => {
+        timeline.clear()
+        timeline
+            .add('first')
+            .to(title.current, { y: '100%', opacity: 0, duration: .8 }, 'first')
+            .to(text.current, { opacity: 0, duration: .5 }, 'first')
+            .to('.cta-btn', { opacity: 0, }, 'first')
+            .to('.cta-btn', { opacity: 1, })
+            .to(text.current, { opacity: 1 },)
+            .to(title.current, { y: 0, opacity: 1, })
+    }, [currentScene])
+
     // const origin = localStorage.getItem('origin')
     // console.log(origin);
+
     return (
         <>
             <div className="cursor md:block hidden">
@@ -36,28 +74,26 @@ function Ui() {
 
             <nav className="flex md:justify-between justify-center" >
                 <div className='md:flex hidden gap-5 basis-1/4'>
-                    <a className='text-lg font-medium select-none' href="#">Home</a>
-                    <a className='text-lg font-medium select-none' onClick={() => navigateTo('/collections/all')} >Shop</a>
-                    <a className='text-lg font-medium select-none' onClick={() => navigateTo('/contact')}>Contact</a>
+                    <a className='text-lg font-medium select-none cursor-pointer' onClick={() => navigateTo('/')} >Home</a>
+                    <a className='text-lg font-medium select-none cursor-pointer' onClick={() => navigateTo('/collections/all')} >Shop</a>
+                    <a className='text-lg font-medium select-none' >Contact</a>
                 </div>
                 <h1 style={{
                     WebkitTextStrokeWidth: '1px',
                     WebkitTextStrokeColor: 'white',
-                }} className="text-3xl font-light uppercase tracking-widest select-none	" >Desert Owners</h1>
+                }} className="text-3xl font-light uppercase tracking-widest select-none	cursor-pointer" onClick={() => navigateTo('/')} >GENSDUMONDE</h1>
                 <p className='text-sm font-thin select-none md:block hidden basis-1/4 text-end' >@ 2024</p>
             </nav>
 
-            <h1 className='main text-3xl md:text-5xl tracking-widest font-medium select-none' >THE VIA <br /> JOURNEY
-                <p className='text-sm select-none -tracking-wide mt-5 mb-3' >
-                    Dive into Louis Vuitton's exploration of new digital <br className='hidden md:block' />
-                    frontiers through VIA, the Maison's first digital trunk. <br className='hidden md:block' />
-                    Representing an ever-evolving imagination, VIA <br className='hidden md:block' />
-                    exemplifies the spirit of travel intrinsic to the <br className='hidden md:block' />
-                    Maison's ethos. It’s a narrative of open-ended <br className='hidden md:block' />
-                    wonder, unconfined by traditional boundaries.
+            <div className="main">
+                <div className='overflow-hidden' >
+                    <h1 className='text-3xl md:text-5xl tracking-widest font-medium select-none' ref={title} >{data[currentScene - 1].title}</h1>
+                </div>
+                <p className='text-md select-none -tracking-wide mt-5 mb-8 leading-5' ref={text}>
+                    {data[currentScene - 1].text}
                 </p>
-                <a className='cta-btn' onClick={() => navigateTo('/collections/all')} >View Collection</a>
-            </h1>
+                <a className='cta-btn text-center md:inline block' onClick={() => navigateTo('/collections/all')} >View Collection</a>
+            </div>
 
             <main>
 
@@ -67,18 +103,28 @@ function Ui() {
                 <div className="flex flex-col space-y-4 p-5">
 
                     <label className="relative flex items-center cursor-pointer">
-                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 1} value={1} onChange={indicatorHandler} />
+                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 1} value={1} />
                         <div
                             className="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#BA7A4D] peer-hover:shadow-lg peer-hover:shadow-yellow-500/50 peer-checked:shadow-lg peer-checked:shadow-yellow-500/50 transition duration-300 ease-in-out"
                         ></div>
-
                     </label>
                     <label className="relative flex items-center cursor-pointer">
-                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 2} value={2} onChange={indicatorHandler} />
+                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 2} value={2} />
                         <div
                             className="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#242018] peer-hover:shadow-lg peer-hover:shadow-[#242018] peer-checked:shadow-lg peer-checked:shadow-[#242018]  transition duration-300 ease-in-out"
                         ></div>
-
+                    </label>
+                    <label className="relative flex items-center cursor-pointer">
+                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 3} value={3} />
+                        <div
+                            className="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#242018] peer-hover:shadow-lg peer-hover:shadow-[#242018] peer-checked:shadow-lg peer-checked:shadow-[#242018]  transition duration-300 ease-in-out"
+                        ></div>
+                    </label>
+                    <label className="relative flex items-center cursor-pointer">
+                        <input className="sr-only peer" name="futuristic-radio" type="radio" checked={currentScene === 4} value={4} />
+                        <div
+                            className="w-4 h-4 bg-transparent border-2 border-white rounded-full peer-checked:bg-white peer-checked:border-[#242018] peer-hover:shadow-lg peer-hover:shadow-[#242018] peer-checked:shadow-lg peer-checked:shadow-[#242018]  transition duration-300 ease-in-out"
+                        ></div>
                     </label>
                 </div>
 

@@ -6,12 +6,15 @@ import SplitType from 'split-type'
 function Loader() {
 
     const para1 = useRef()
+    const percentage = useRef()
 
     const [loadedAnimation, setLoadedAnimation] = useState(false)
-    const { active, progress, errors, item, loaded, total } = useProgress()
+    const progress = useProgress(state => state.progress)
+
+    if (percentage.current) percentage.current.style.width = `${progress}%`
 
     useEffect(() => {
-        if (progress === 100 && loadedAnimation ) {
+        if (progress === 100 && loadedAnimation) {
             console.log(loadedAnimation);
             const text = new SplitType('#split-text', { tagName: 'span', types: 'words' })
             gsap.fromTo(text.words,
@@ -23,7 +26,7 @@ function Loader() {
                     duration: .5, // Duration of each animation
                     stagger: 0.1, // Delay between each letter animation
                     ease: "power3.in", // Easing function
-                    onComplete : ()=> para1.current.style.display = 'none'
+                    onComplete: () => para1.current.style.display = 'none'
                 }
             );
         }
@@ -31,19 +34,19 @@ function Loader() {
 
     useEffect(() => {
         const text = new SplitType('#split-text', { tagName: 'span', types: 'words' })
-            gsap.fromTo(text.words,
-                {
-                opacity:0, // Start opacity
-                y : 0
+        gsap.fromTo(text.words,
+            {
+                opacity: 0, // Start opacity
+                y: 0
             },
             {
                 y: 0,
-                delay : 1,
+                delay: 1,
                 opacity: 1, // End opacity
-                duration:.5, // Duration of each animation
+                duration: .5, // Duration of each animation
                 stagger: 0.1, // Delay between each letter animation
                 ease: "power3.in", // Easing function
-                onComplete :  ()=> setLoadedAnimation(true)
+                onComplete: () => setLoadedAnimation(true)
             }
         )
     }, [])
@@ -64,54 +67,12 @@ function Loader() {
                 <span className='sub-para1' >finest </span>
                 <span className='sub-para1' >clothes</span> */}
                 <span id='split-text' >We aim to enrich your daily living <br /> by offering the finest clothes.</span>
-                </div>
+            </div>
+            <div className="w-56 h-2 bg-black rounded-lg relative  mt-7">
+                <div className="w-0 h-full  bg-[#FBFBFB] rounded-lg absolute top-1/2 -translate-y-1/2 left-0" ref={percentage}></div>
+            </div>
         </div>
     )
 }
 
 export default Loader
-
-
-//     < script src = "https://unpkg.com/split-type" ></script >
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-
-// <script>
-// let typeSplit = new SplitType('[animate]', {
-//   types: 'lines, words, chars',
-//   tagName: 'span'
-// })
-
-// gsap.from('[animate] .char', {
-//   y: '100%',
-//   opacity: 1,
-//   duration: 0.5,
-//   ease: 'power1.out',
-//   stagger: 0.1,
-  
-// })
-// </script>
-
-//     < script src = "https://unpkg.com/split-type" ></script >
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-
-// <script>
-// let typeSplit = new SplitType('[animate]', {
-//   types: 'lines, words, chars',
-//   tagName: 'span'
-// })
-
-// gsap.from('[animate] .char', {
-//   y: '100%',
-//   opacity: 1,
-//   duration: 0.25,
-//   ease: 'Second.inOut',
-//   stagger: 0.1,
-  
-//   scrollTrigger: {
-//     trigger: '[animate]',
-//     start: 'top center',
-    
-//   }
-// })
-// </script>

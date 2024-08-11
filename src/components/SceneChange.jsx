@@ -13,12 +13,29 @@ function SceneChange() {
         setCurrentScene(newScene)
     }
 
+    let prevTouch;
+    const touchHandler = (e) => {
+        if (transitionStateRef.current === 'ready') {
+            if (e.type === 'touchstart') {
+                prevTouch = e.touches[0].clientY
+            }
+            if (e.type === 'touchend') {
+                if (prevTouch < e.changedTouches[0].clientY) {
+                    console.log('h');
+                    currentSceneRef.current > 1 && incScene(-1)
+                } else if (prevTouch > e.changedTouches[0].clientY) {
+                    console.log('j');
+                    currentSceneRef.current < 4 && incScene(1)
+                }
+            }
+        }
+    }
+
     const scrollHandler = (e) => {
-        console.log(transitionStateRef.current);
         if (transitionStateRef.current === 'ready') {
             if (e.deltaY < 0 && currentSceneRef.current > 1) {
                 incScene(-1)
-            } else if (e.deltaY > 0 && currentSceneRef.current < 2) {
+            } else if (e.deltaY > 0 && currentSceneRef.current < 4) {
                 incScene(1)
             }
         }
@@ -26,8 +43,12 @@ function SceneChange() {
 
     useEffect(() => {
         document.body.addEventListener('wheel', scrollHandler)
+        document.body.addEventListener('touchstart', touchHandler)
+        document.body.addEventListener('touchend', touchHandler)
         return () => {
             document.body.removeEventListener('wheel', scrollHandler)
+            document.body.removeEventListener('touchstart', touchHandler)
+            document.body.removeEventListener('touchend', touchHandler)
         }
     }, [])
 

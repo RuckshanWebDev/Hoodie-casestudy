@@ -36,7 +36,7 @@ function App() {
 
   return (
     <div className="app" >
-      {/* <Loader /> */}
+      <Loader />
       <Suspense   >
         <Experience />
       </Suspense>
