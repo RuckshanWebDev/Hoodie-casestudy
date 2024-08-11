@@ -10,7 +10,6 @@ function Experience() {
         console.log('loaded');
     }
 
-<<<<<<< HEAD
     function detectMob() {
         const toMatch = [
             /Android/i,
@@ -31,11 +30,6 @@ function Experience() {
 
     return (
         <Canvas gl={{ antialias: true }} camera={{ fov: isMobile ? 50 : 40, position: [0, 12, -5.5], }} onLoadedData={load}   >
-=======
-    // position: [0, 11.4, -7.5],
-    return (
-        <Canvas gl={{ antialias: true }} camera={{ fov: 40, position: [0, 10, 25], lookAt: () => (0, 0, 0) }} onLoadedData={load}   >
->>>>>>> d3539a09b88121c96ff5a12e385884dc6b9a8e7e
 
             {/* <directionalLight
                 position={[0, 20, -5.5]}

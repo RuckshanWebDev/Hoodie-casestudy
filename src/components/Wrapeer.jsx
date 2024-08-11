@@ -19,9 +19,9 @@ function Wrapper() {
 
     return (
         <>
-            <Enviroments />
-
             <Movement />
+
+            <Enviroments />
 
             <Base />
 

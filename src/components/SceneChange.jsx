@@ -52,8 +52,6 @@ function SceneChange() {
         }
     }, [])
 
-
-
     useEffect(() => {
         currentSceneRef.current = currentScene
     }, [currentScene])
